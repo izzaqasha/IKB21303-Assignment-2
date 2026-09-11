@@ -1,0 +1,543 @@
+============================================================
+IKB21303 - CRYPTOGRAPHY AND STEGANOGRAPHY
+ASSIGNMENT 2 - DEVELOPMENT PROGRESS
+============================================================
+
+
+#### [STAGE 1] PROJECT PLANNING ####
+Status: COMPLETED
+
+- Assignment requirements reviewed.
+- LSB image steganography selected as the main technique.
+- Development plan established.
+
+
+#### [STAGE 2] DEVELOPMENT ENVIRONMENT ####
+Status: COMPLETED
+
+- Python 3.13.15 selected for the project.
+- Python virtual environment (.venv) created successfully.
+- Required libraries installed.
+- VS Code project environment configured.
+
+
+#### [STAGE 3] PROJECT STRUCTURE ####
+Status: COMPLETED
+
+Project components currently include:
+- steganography.py
+- main.py
+- analysis.py
+- cover_images/
+- secret_files/
+- output/
+- screenshots/
+- progress.txt
+
+
+#### [STAGE 4] LSB STEGANOGRAPHY ENGINE ####
+Status: COMPLETED
+
+Implemented:
+- hide_file()
+- extract_file()
+- RGB image conversion
+- Binary secret file reading
+- Payload creation
+- Metadata storage
+- LSB embedding
+- LSB extraction
+- Image capacity checking
+- Output file generation
+
+
+#### [STAGE 5] DEBUGGING ####
+Status: COMPLETED
+
+Problem:
+- The extracted secret.txt file was initially empty.
+
+Cause:
+- The file size was stored using 8 bytes during the hiding process,
+  but only 4 bytes were being read during extraction.
+
+Original extraction:
+file_size = int.from_bytes(data[6:10], "big")
+
+Corrected extraction:
+file_size = int.from_bytes(data[6:14], "big")
+
+Result:
+- Extraction now works correctly.
+- Original secret data was successfully recovered.
+
+
+#### [STAGE 6] INITIAL FUNCTIONAL TEST ####
+Status: PASSED
+
+Test file:
+secret.txt
+
+Original content:
+Secret Message : 123
+
+Original file size:
+21 bytes
+
+Payload size:
+45 bytes
+
+Total bits embedded:
+360 bits
+
+Image capacity:
+3,000,000 bits
+
+Bits actually embedded:
+360 bits
+
+Extracted filename:
+secret.txt
+
+Extracted file size:
+21 bytes
+
+Extracted secret data:
+Secret Message : 123
+
+Result:
+PASS
+
+#### [STAGE 7] GUI DESIGN AND LAYOUT ####
+Status: COMPLETED
+
+- Designed the GUI layout for the Image Steganography Tool.
+- The steganography interface contains:
+  - Cover image selection
+  - Secret file selection
+  - Hide File operation
+  - Stego image selection
+  - Extract File operation
+  - Operation status display
+
+- Designed the GUI layout for the Image Steganalysis Tool.
+- The steganalysis interface contains:
+  - Cover image selection and preview
+  - Stego image selection and preview
+  - Cover and stego file size display
+  - File size difference calculation
+  - Histogram analysis function
+  - Analysis result/status display
+
+- The steganography and steganalysis interfaces are designed
+  as separate functional areas to improve usability and clarity.
+
+Evidence:
+05_gui_wireframe_steganography.png
+06_gui_wireframe_steganalysis.png
+
+Note:
+The GUI designs are currently wireframes/prototypes.
+Actual GUI implementation will be performed after the core
+steganography and analysis functions have been developed and tested.
+
+
+#### [STAGE 8] SHA-256 Integrity Verification ####
+Status: PASSED
+
+#### [STAGE 9.1] PDF FILE-TYPE TEST ####
+Status: COMPLETED
+
+Test file:
+secret.pdf
+
+Original file size:
+18,422 bytes
+
+Payload size:
+18,446 bytes
+
+Total bits embedded:
+147,568 bits
+
+Image capacity:
+3,000,000 bits
+
+Bits actually embedded:
+147,568 bits
+
+Hiding result:
+PASS
+
+Extraction result:
+PASS
+
+Extracted filename:
+secret.pdf
+
+Extracted file size:
+18,422 bytes
+
+SHA-256 verification:
+Original and extracted SHA-256 hashes MATCH.
+
+Integrity verification:
+PASSED
+
+Conclusion:
+The steganography system successfully hid and extracted
+the PDF file without altering its binary content.
+
+Evidence:
+08_pdf_hiding_test.png
+09_pdf_extraction_test.png
+10_pdf_sha256_verification.png
+
+
+
+### [STAGE 9.2] JPG FILE-TYPE TEST ###
+Status: COMPLETED
+
+Test file:
+secret.jpg
+
+Original file size:
+90,145 bytes
+
+Payload size:
+90,169 bytes
+
+Total bits embedded:
+721,352 bits
+
+Image capacity:
+3,000,000 bits
+
+Bits actually embedded:
+721,352 bits
+
+Hiding result:
+PASS
+
+Extraction result:
+PASS
+
+Extracted filename:
+secret.jpg
+
+Extracted file size:
+90,145 bytes
+
+SHA-256 verification:
+Original and extracted SHA-256 hashes MATCH.
+
+Integrity verification:
+PASSED
+
+Conclusion:
+The steganography system successfully hid and extracted
+the JPG image without altering its binary content.
+
+Evidence:
+11_jpg_hiding_test.png
+12_jpg_extraction_test.png
+13_jpg_sha256_verification.png
+
+
+
+### [STAGE 10.3] PIXEL DIFFERENCE ANALYSIS ###
+Status: COMPLETED
+
+Test images:
+Cover: cover_images/cover.png
+Stego: output/stego.png
+
+Total pixels:
+1,000,000
+
+Changed pixels:
+115
+
+Changed pixel percentage:
+0.01%
+
+Changed RGB channels:
+197
+
+Total channel-value difference:
+197
+
+Maximum channel difference:
+1
+
+Conclusion:
+The pixel difference analysis confirms that the LSB
+steganography process makes very small modifications
+to the cover image. Only 115 pixels were changed,
+representing 0.01% of the total pixels. The maximum
+individual RGB channel difference was 1, which is
+consistent with the LSB embedding method.
+
+File-size observation:
+The stego PNG was 17.28% smaller than the original
+cover PNG. This does not indicate data loss because
+the pixel-level analysis confirms that the images
+have the same dimensions and only small LSB changes
+were introduced. PNG re-encoding and compression can
+produce different file sizes.
+
+Evidence:
+18_pixel_difference_analysis.png
+
+
+
+### [STAGE 10.4] STEGANALYSIS RESULT ###
+Status: COMPLETED
+
+Overall result:
+MINOR PIXEL-LEVEL MODIFICATIONS DETECTED
+
+File-size analysis:
+Cover image size: 1,079,222 bytes
+Stego image size: 892,692 bytes
+Difference: -186,530 bytes
+Percentage difference: -17.28%
+
+Pixel analysis:
+Total pixels: 1,000,000
+Changed pixels: 115
+Changed pixel percentage: 0.01%
+Changed RGB channels: 197
+Total channel-value difference: 197
+Maximum channel difference: 1
+
+Conclusion:
+The analysis detected minor pixel-level modifications
+between the cover and stego images. The maximum RGB
+channel difference was 1, which is consistent with the
+implemented LSB embedding technique.
+
+The analysis result does not independently prove the
+presence of hidden data.
+
+Evidence:
+19_steganalysis_result.png
+
+Note:
+Pillow displayed a DeprecationWarning for getdata().
+This will be addressed during final code cleanup.
+
+
+
+### [STAGE 10.5] FINAL STEGANALYSIS TEST ###
+Status: COMPLETED
+
+Final test:
+Cover image: cover_images/cover.png
+Stego image: output/stego.png
+
+Tests performed:
+1. File-size comparison
+2. RGB histogram analysis
+3. Pixel difference analysis
+4. Steganalysis result generation
+
+Final pixel analysis:
+Total pixels: 1,000,000
+Changed pixels: 115
+Changed pixel percentage: 0.01%
+Changed RGB channels: 197
+Total channel-value difference: 197
+Maximum channel difference: 1
+
+Final analysis result:
+MINOR PIXEL-LEVEL MODIFICATIONS DETECTED
+
+Final test status:
+PASSED
+
+Conclusion:
+The steganalysis module successfully performed
+file-size, histogram, and pixel-level analysis
+on the cover and stego images and generated an
+overall analysis result.
+
+Evidence:
+20_steganalysis_final_test.png
+
+[STAGE 11.2] GUI WINDOW SETUP
+Status: COMPLETED
+
+Created:
+gui.py
+
+GUI framework:
+Tkinter
+
+Initial GUI features:
+- Main application window
+- Application title
+- Basic application description
+- Fixed initial window size
+
+Test result:
+GUI window opened successfully and closed normally.
+
+Evidence:
+21_gui_initial_window.png
+
+
+### [STAGE 11.3] HIDE FILE GUI ###
+Status: COMPLETED
+
+Implemented:
+- Cover image selection
+- Secret file selection
+- Stego image output selection
+- Hide File button
+- Input validation
+- Error handling
+- Success notification
+
+Integration:
+GUI successfully calls the existing hide_file()
+function from steganography.py.
+
+Test:
+secret_files/secret.txt was successfully hidden
+inside a selected cover image through the GUI.
+
+Output:
+output/stego_gui.png
+
+Evidence:
+22_gui_hide_file_success.png
+
+
+### [STAGE 11.4] EXTRACT FILE GUI ###
+Status: COMPLETED
+
+Implemented:
+- Stego image selection
+- Output folder selection
+- Extract File button
+- Input validation
+- Error handling
+- Success notification
+
+Integration:
+GUI successfully calls the existing extract_file()
+function from steganography.py.
+
+Test:
+The stego image generated through the GUI was
+successfully processed and the hidden secret file
+was extracted through the GUI.
+
+Output:
+output/extracted_gui/secret.txt
+
+Verification:
+The extracted secret file contains the original
+secret message.
+
+Evidence:
+23_gui_extract_file_success.png
+24_gui_extracted_secret_verification.png
+
+
+### [STAGE 11.5] SHA-256 INTEGRITY VERIFICATION GUI ###
+Status: COMPLETED
+
+Implemented:
+- Original file selection
+- Extracted file selection
+- SHA-256 hash calculation
+- Hash comparison
+- MATCH / FAILED result
+- Input validation
+- Error handling
+- GUI notification
+
+Integration:
+GUI successfully calls calculate_sha256()
+from integrity.py.
+
+Test:
+Original secret.txt and GUI-extracted secret.txt
+were compared using SHA-256.
+
+Result:
+SHA-256 hashes MATCH.
+Integrity verification: PASSED.
+
+Evidence:
+25_gui_sha256_passed.png
+
+[STAGE 11.6] STEGANALYSIS GUI
+Status: COMPLETED
+
+Implemented:
+- Cover image selection
+- Stego image selection
+- File-size comparison
+- RGB histogram generation
+- Pixel-difference analysis
+- Steganalysis result generation
+- Input validation
+- Error handling
+- GUI result notification
+
+Integration:
+GUI successfully calls the existing analysis
+functions from analysis.py.
+
+Test:
+The cover image and stego image were selected
+through the GUI and successfully analyzed.
+
+Analysis components:
+- File-size comparison
+- RGB histogram analysis
+- Pixel-level difference analysis
+- Overall steganalysis conclusion
+
+Result:
+MINOR PIXEL-LEVEL MODIFICATIONS DETECTED
+
+Evidence:
+26_gui_steganalysis_success.png
+
+
+### [STAGE 11.8] GUI CLEANUP AND FINAL POLISH ###
+Status: COMPLETED
+
+Objective:
+Improve the appearance and usability of the completed
+graphical user interface without changing the underlying
+functionality.
+
+Improvements:
+- Updated application title
+- Improved main heading
+- Added application description
+- Improved window sizing
+- Added status indicator
+- Added Exit button
+- Maintained existing Hide File functionality
+- Maintained existing Extract File functionality
+- Maintained existing SHA-256 functionality
+- Maintained existing Steganalysis functionality
+
+Final Testing:
+All major GUI functions were tested after the interface
+improvements.
+
+Result:
+All implemented functions continued to operate correctly.
+
+Final GUI:
+Hide File                  PASSED
+Extract File               PASSED
+SHA-256 Integrity          PASSED
+Steganalysis               PASSED
